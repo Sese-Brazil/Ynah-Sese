@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Mobile Applications | Mary Ynah Brazil Sese</title>
+  <script>
+    tailwind = { config: { darkMode: 'class' } };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#10131a] dark:text-slate-100">
+  <main class="section">
+    <a href="../index.html#projects" class="text-sm font-bold text-blue-700 dark:text-blue-300">
+      Back to projects
+    </a>
+
+    <p class="section-kicker mt-8">Case Study</p>
+    <h1 class="section-title">Java Mobile Applications</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-300">
+      A collection of academic mobile application projects developed with Android Studio APK
+      development and MIT App Inventor, using Java-based logic, mobile UI workflows, and interactive
+      app features.
+    </p>
+
+    <section class="mt-10 grid gap-6 lg:grid-cols-2">
+      <article class="info-card">
+        <h2>Overview</h2>
+        <p>
+          These mobile applications demonstrate Android interface design, app navigation, event-driven
+          programming, APK building, and practical feature implementation for mobile-based academic
+          projects.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h2>My Contributions</h2>
+        <p>
+          Responsible for mobile UI implementation, Java-based app logic, screen navigation, feature
+          testing, APK generation, and building interactive workflows using Android Studio and MIT App
+          Inventor.
+        </p>
+      </article>
+    </section>
+
+    <section class="mt-8 grid gap-6 lg:grid-cols-3">
+      <article class="info-card">
+        <h2>Features</h2>
+        <p>
+          Mobile screens, navigation flows, interactive buttons, forms, app logic, APK builds,
+          prototype testing, and user-friendly Android interfaces.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h2>Technologies</h2>
+        <p>
+          Java, Android Studio, APK development, MIT App Inventor, mobile UI components, OOP concepts,
+          Git, and VS Code.
+        </p>
+      </article>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-2xl font-extrabold">Mobile Applications</h2>
+      <div class="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="phone-gallery" data-gallery>
+          <button class="phone-arrow phone-arrow-left" type="button" aria-label="Previous OroPeso screenshot">‹</button>
+          <img class="phone-slide active" src="../assets/OroPeso.jpg" alt="OroPeso mobile app screenshot">
+          <img class="phone-slide" src="../assets/OroPeso1.jpg" alt="OroPeso mobile app second screenshot">
+          <span class="screen-label">OroPeso</span>
+          <button class="phone-arrow phone-arrow-right" type="button" aria-label="Next OroPeso screenshot">›</button>
+        </div>
+
+        <div class="phone-gallery" data-gallery>
+          <button class="phone-arrow phone-arrow-left" type="button" aria-label="Previous Weight Right screenshot">‹</button>
+          <img class="phone-slide active" src="../assets/WeightRight.jpg" alt="Weight Right mobile app screenshot">
+          <img class="phone-slide" src="../assets/WeightRight1.jpg" alt="Weight Right mobile app second screenshot">
+          <img class="phone-slide" src="../assets/WeightRight2.jpg" alt="Weight Right mobile app third screenshot">
+          <span class="screen-label">Weight Right</span>
+          <button class="phone-arrow phone-arrow-right" type="button" aria-label="Next Weight Right screenshot">›</button>
+        </div>
+
+        <div class="phone-gallery" data-gallery>
+          <button class="phone-arrow phone-arrow-left" type="button" aria-label="Previous Chinese Horoscope screenshot">‹</button>
+          <img class="phone-slide active" src="../assets/ChineseHoroscope.jpg" alt="Chinese Horoscope mobile app screenshot">
+          <img class="phone-slide" src="../assets/ChineseHoroscope1.jpg" alt="Chinese Horoscope mobile app second screenshot">
+          <span class="screen-label">Chinese Horoscope</span>
+          <button class="phone-arrow phone-arrow-right" type="button" aria-label="Next Chinese Horoscope screenshot">›</button>
+        </div>
+
+        <div class="phone-gallery" data-gallery>
+          <button class="phone-arrow phone-arrow-left" type="button" aria-label="Previous Phrase Pop screenshot">‹</button>
+          <img class="phone-slide active" src="../assets/PhrasePop.jpg" alt="Phrase Pop mobile app screenshot">
+          <img class="phone-slide" src="../assets/PhrasePop1.jpg" alt="Phrase Pop mobile app second screenshot">
+          <span class="screen-label">Phrase Pop</span>
+          <button class="phone-arrow phone-arrow-right" type="button" aria-label="Next Phrase Pop screenshot">›</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+      const slides = Array.from(gallery.querySelectorAll('.phone-slide'));
+      const previous = gallery.querySelector('.phone-arrow-left');
+      const next = gallery.querySelector('.phone-arrow-right');
+      let activeIndex = 0;
+
+      function showSlide(index) {
+        activeIndex = (index + slides.length) % slides.length;
+        slides.forEach((slide, slideIndex) => {
+          slide.classList.toggle('active', slideIndex === activeIndex);
+        });
+      }
+
+      previous?.addEventListener('click', () => showSlide(activeIndex - 1));
+      next?.addEventListener('click', () => showSlide(activeIndex + 1));
+    });
+  </script>
+</body>
+</html>

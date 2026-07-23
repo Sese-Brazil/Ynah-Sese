@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Laptop Animation</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: transparent !important;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+    }
+
+    #laptopCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: transparent !important;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="laptopCanvas" aria-hidden="true"></canvas>
+
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+    const canvas = document.querySelector('#laptopCanvas');
+    const scene = new THREE.Scene();
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true
+    });
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+    const laptop = new THREE.Group();
+    scene.add(laptop);
+
+    const metal = new THREE.MeshStandardMaterial({
+      color: 0x94a3b8,
+      metalness: 0.72,
+      roughness: 0.28
+    });
+
+    const darkMetal = new THREE.MeshStandardMaterial({
+      color: 0x1f2937,
+      metalness: 0.64,
+      roughness: 0.34
+    });
+
+    const keyMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      metalness: 0.1,
+      roughness: 0.5
+    });
+
+    const glowMaterial = new THREE.MeshStandardMaterial({
+      color: 0x60a5fa,
+      emissive: 0x2563eb,
+      emissiveIntensity: 0.65,
+      metalness: 0.15,
+      roughness: 0.25
+    });
+
+    const base = new THREE.Mesh(new THREE.BoxGeometry(4.8, 0.22, 3.05), metal);
+    base.position.y = -0.12;
+    laptop.add(base);
+
+    const trackpad = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.025, 0.72), darkMetal);
+    trackpad.position.set(0, 0.02, 0.72);
+    laptop.add(trackpad);
+
+    const keyGroup = new THREE.Group();
+    for (let row = 0; row < 4; row += 1) {
+      for (let col = 0; col < 10; col += 1) {
+        const key = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.035, 0.16), keyMaterial);
+        key.position.set(-1.45 + col * 0.32, 0.04, -0.95 + row * 0.23);
+        keyGroup.add(key);
+      }
+    }
+    laptop.add(keyGroup);
+
+    const hinge = new THREE.Group();
+    hinge.position.set(0, 0.02, -1.5);
+    laptop.add(hinge);
+
+    const screen = new THREE.Group();
+    hinge.add(screen);
+
+    const displayBack = new THREE.Mesh(new THREE.BoxGeometry(4.65, 2.85, 0.16), metal);
+    displayBack.position.set(0, 1.42, 0);
+    screen.add(displayBack);
+
+    const displayPanel = new THREE.Mesh(new THREE.BoxGeometry(4.28, 2.42, 0.035), darkMetal);
+    displayPanel.position.set(0, 1.42, 0.091);
+    screen.add(displayPanel);
+
+    const displayGlow = new THREE.Mesh(new THREE.BoxGeometry(3.6, 1.7, 0.02), glowMaterial);
+    displayGlow.position.set(0, 1.42, 0.115);
+    screen.add(displayGlow);
+
+    const codeLines = new THREE.Group();
+    const lineMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      emissive: 0x67e8f9,
+      emissiveIntensity: 0.5,
+      roughness: 0.35
+    });
+
+    [2.2, 1.4, 2.8, 1.9, 2.45].forEach((width, index) => {
+      const line = new THREE.Mesh(new THREE.BoxGeometry(width, 0.045, 0.025), lineMaterial);
+      line.position.set(-0.25, 1.97 - index * 0.27, 0.14);
+      codeLines.add(line);
+    });
+    screen.add(codeLines);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
+    keyLight.position.set(3.6, 4.4, 4.8);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.PointLight(0x60a5fa, 45, 12);
+    rimLight.position.set(-3.2, 1.7, 2.6);
+    scene.add(rimLight);
+
+    const clock = new THREE.Clock();
+
+    function easeInOutSine(value) {
+      return -(Math.cos(Math.PI * value) - 1) / 2;
+    }
+
+    function animate() {
+      const elapsed = clock.getElapsedTime();
+      const openDuration = 1.05;
+      const spinDuration = 3.6;
+      const closeDuration = 1.05;
+      const cycleDuration = openDuration + spinDuration + closeDuration;
+      const cycleTime = elapsed % cycleDuration;
+
+      const closedAngle = THREE.MathUtils.degToRad(88);
+      const openAngle = THREE.MathUtils.degToRad(-16);
+      let openAmount = 0;
+      let spinProgress = 0;
+
+      if (cycleTime <= openDuration) {
+        openAmount = easeInOutSine(cycleTime / openDuration);
+      } else if (cycleTime <= openDuration + spinDuration) {
+        const spinTime = cycleTime - openDuration;
+        openAmount = 1;
+        spinProgress = spinTime / spinDuration;
+      } else {
+        const closeProgress = (cycleTime - openDuration - spinDuration) / closeDuration;
+        openAmount = 1 - easeInOutSine(closeProgress);
+        spinProgress = 1;
+      }
+
+      screen.rotation.x = THREE.MathUtils.lerp(closedAngle, openAngle, openAmount);
+      laptop.rotation.y = easeInOutSine(spinProgress) * Math.PI * 2;
+      laptop.rotation.x = -0.16 + Math.sin(elapsed * 1.15) * 0.035;
+      laptop.rotation.z = Math.sin(elapsed * 0.8) * 0.035;
+      laptop.position.y = 0.65 + Math.sin(elapsed * 1.2) * 0.06;
+
+      displayGlow.material.emissiveIntensity = 0.35 + openAmount * 0.75;
+      codeLines.visible = openAmount > 0.28;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    function resize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.position.set(0, 2.3, width < 640 ? 8 : 6.5);
+      laptop.scale.setScalar(width < 800 ? 0.78 : 1.08);
+      camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+  </script>
+</body>
+</html>
