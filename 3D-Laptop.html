@@ -44,54 +44,82 @@
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
     const laptop = new THREE.Group();
     scene.add(laptop);
 
     const metal = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8,
-      metalness: 0.72,
-      roughness: 0.28
+      color: 0xaeb7c4,
+      metalness: 0.86,
+      roughness: 0.22
     });
 
     const darkMetal = new THREE.MeshStandardMaterial({
-      color: 0x1f2937,
-      metalness: 0.64,
-      roughness: 0.34
+      color: 0x111827,
+      metalness: 0.72,
+      roughness: 0.3
     });
 
     const keyMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0f172a,
+      color: 0x020617,
       metalness: 0.1,
-      roughness: 0.5
+      roughness: 0.42
+    });
+
+    const glassMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0b1220,
+      metalness: 0.2,
+      roughness: 0.12
     });
 
     const glowMaterial = new THREE.MeshStandardMaterial({
-      color: 0x60a5fa,
+      color: 0x3b82f6,
       emissive: 0x2563eb,
-      emissiveIntensity: 0.65,
-      metalness: 0.15,
-      roughness: 0.25
+      emissiveIntensity: 0.9,
+      metalness: 0.82,
+      roughness: 0.07
     });
 
-    const base = new THREE.Mesh(new THREE.BoxGeometry(4.8, 0.22, 3.05), metal);
-    base.position.y = -0.12;
+    const accentMaterial = new THREE.MeshStandardMaterial({
+      color: 0x93c5fd,
+      emissive: 0x2563eb,
+      emissiveIntensity: 0.25,
+      metalness: 0.2,
+      roughness: 0.2
+    });
+
+    const base = new THREE.Mesh(new THREE.BoxGeometry(5.15, 0.14, 3.08), metal);
+    base.position.y = -0.11;
     laptop.add(base);
 
-    const trackpad = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.025, 0.72), darkMetal);
-    trackpad.position.set(0, 0.02, 0.72);
+    const deckInset = new THREE.Mesh(new THREE.BoxGeometry(4.7, 0.035, 2.42), darkMetal);
+    deckInset.position.set(0, -0.01, -0.13);
+    laptop.add(deckInset);
+
+    const frontLip = new THREE.Mesh(new THREE.BoxGeometry(5.22, 0.045, 0.08), accentMaterial);
+    frontLip.position.set(0, -0.005, 1.55);
+    laptop.add(frontLip);
+
+    const trackpad = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.03, 0.78), glassMaterial);
+    trackpad.position.set(0, 0.015, 0.78);
     laptop.add(trackpad);
 
     const keyGroup = new THREE.Group();
     for (let row = 0; row < 4; row += 1) {
-      for (let col = 0; col < 10; col += 1) {
-        const key = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.035, 0.16), keyMaterial);
-        key.position.set(-1.45 + col * 0.32, 0.04, -0.95 + row * 0.23);
+      for (let col = 0; col < 11; col += 1) {
+        const key = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.03, 0.14), keyMaterial);
+        key.position.set(-1.45 + col * 0.29, 0.035, -1.03 + row * 0.21);
         keyGroup.add(key);
       }
     }
     laptop.add(keyGroup);
+
+    const hingeBar = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 4.5, 24), darkMetal);
+    hingeBar.rotation.z = Math.PI / 2;
+    hingeBar.position.set(0, 0.04, -1.51);
+    laptop.add(hingeBar);
 
     const hinge = new THREE.Group();
     hinge.position.set(0, 0.02, -1.5);
@@ -100,32 +128,21 @@
     const screen = new THREE.Group();
     hinge.add(screen);
 
-    const displayBack = new THREE.Mesh(new THREE.BoxGeometry(4.65, 2.85, 0.16), metal);
-    displayBack.position.set(0, 1.42, 0);
+    const displayBack = new THREE.Mesh(new THREE.BoxGeometry(4.75, 2.82, 0.11), metal);
+    displayBack.position.set(0, 1.41, -0.015);
     screen.add(displayBack);
 
-    const displayPanel = new THREE.Mesh(new THREE.BoxGeometry(4.28, 2.42, 0.035), darkMetal);
-    displayPanel.position.set(0, 1.42, 0.091);
+    const displayPanel = new THREE.Mesh(new THREE.BoxGeometry(4.42, 2.5, 0.035), glassMaterial);
+    displayPanel.position.set(0, 1.41, 0.06);
     screen.add(displayPanel);
 
-    const displayGlow = new THREE.Mesh(new THREE.BoxGeometry(3.6, 1.7, 0.02), glowMaterial);
-    displayGlow.position.set(0, 1.42, 0.115);
+    const displayGlow = new THREE.Mesh(new THREE.BoxGeometry(3.88, 1.92, 0.02), glowMaterial);
+    displayGlow.position.set(0, 1.41, 0.085);
     screen.add(displayGlow);
 
-    const codeLines = new THREE.Group();
-    const lineMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      emissive: 0x67e8f9,
-      emissiveIntensity: 0.5,
-      roughness: 0.35
-    });
-
-    [2.2, 1.4, 2.8, 1.9, 2.45].forEach((width, index) => {
-      const line = new THREE.Mesh(new THREE.BoxGeometry(width, 0.045, 0.025), lineMaterial);
-      line.position.set(-0.25, 1.97 - index * 0.27, 0.14);
-      codeLines.add(line);
-    });
-    screen.add(codeLines);
+    const cameraDot = new THREE.Mesh(new THREE.SphereGeometry(0.035, 16, 16), darkMetal);
+    cameraDot.position.set(0, 2.56, 0.105);
+    screen.add(cameraDot);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.75));
 
@@ -136,6 +153,10 @@
     const rimLight = new THREE.PointLight(0x60a5fa, 45, 12);
     rimLight.position.set(-3.2, 1.7, 2.6);
     scene.add(rimLight);
+
+    const sweepLight = new THREE.PointLight(0xffffff, 28, 8);
+    sweepLight.position.set(-2.8, 2.2, 3.2);
+    scene.add(sweepLight);
 
     const clock = new THREE.Clock();
 
@@ -174,8 +195,10 @@
       laptop.rotation.z = Math.sin(elapsed * 0.8) * 0.035;
       laptop.position.y = 0.65 + Math.sin(elapsed * 1.2) * 0.06;
 
+      sweepLight.position.x = Math.sin(elapsed * 1.35) * 3.6;
+      sweepLight.position.y = 2.1 + Math.cos(elapsed * 1.1) * 0.45;
+      sweepLight.position.z = 3.4 + Math.sin(elapsed * 0.85) * 0.7;
       displayGlow.material.emissiveIntensity = 0.35 + openAmount * 0.75;
-      codeLines.visible = openAmount > 0.28;
 
       renderer.render(scene, camera);
       requestAnimationFrame(animate);

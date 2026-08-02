@@ -266,44 +266,56 @@ body {
   color-scheme: normal;
 }
 
-.photo-holder {
-  width: min(100%, 23rem);
-  aspect-ratio: 1;
-  margin-inline: auto;
-  display: grid;
-  place-items: end center;
-  border: 1px dashed rgb(59 130 246 / 0.6);
-  border-radius: 999px;
-  overflow: hidden;
+.about-panel {
   position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.5rem;
   background:
-    radial-gradient(circle at 50% 28%, rgb(96 165 250 / 0.35), transparent 12rem),
-    linear-gradient(rgb(59 130 246 / 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(59 130 246 / 0.12) 1px, transparent 1px),
-    linear-gradient(135deg, rgb(37 99 235 / 0.16), rgb(15 23 42 / 0.02));
-  background-size: auto, 32px 32px, 32px 32px, auto;
+    radial-gradient(circle at 12% 20%, rgb(37 99 235 / 0.24), transparent 22rem),
+    linear-gradient(rgb(59 130 246 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(59 130 246 / 0.08) 1px, transparent 1px),
+    rgb(255 255 255 / 0.045);
+  background-size: auto, 36px 36px, 36px 36px, auto;
+  padding: clamp(1.5rem, 4vw, 3rem);
 }
 
-.photo-holder::before {
+.about-panel::after {
   content: "";
   position: absolute;
-  inset: 12% 14% 8%;
+  inset: auto -8rem -12rem auto;
+  height: 18rem;
+  width: 18rem;
   border-radius: 999px;
-  background: rgb(37 99 235 / 0.22);
+  background: rgb(37 99 235 / 0.18);
   filter: blur(48px);
 }
 
-.profile-photo {
-  position: relative;
-  z-index: 1;
-  width: 92%;
-  max-height: 22rem;
-  object-fit: contain;
-  filter: drop-shadow(0 28px 38px rgb(15 23 42 / 0.28));
+.about-copy {
+  margin-top: 1.25rem;
+  max-width: 62rem;
+  color: rgb(203 213 225);
+  font-size: clamp(1rem, 1.5vw, 1.18rem);
+  line-height: 1.9;
 }
 
-.dark .profile-photo {
-  filter: drop-shadow(0 28px 42px rgb(37 99 235 / 0.25));
+.about-chips {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.about-chips span {
+  border: 1px solid rgb(96 165 250 / 0.28);
+  border-radius: 999px;
+  background: rgb(37 99 235 / 0.12);
+  padding: 0.55rem 0.8rem;
+  color: rgb(191 219 254);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .skill-card,
