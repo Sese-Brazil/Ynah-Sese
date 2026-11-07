@@ -33,7 +33,7 @@ export default function CaseStudyPage({ project }) {
     <>
       <main id="main">
         <section className="section case-hero">
-          <Link href="/#work" className="button button-ghost w-fit">Back to work</Link>
+          <Link href="/#home" className="button button-ghost w-fit">Back to home</Link>
           <p className="kicker">{project.client} • {project.status}</p>
           <h1 className="editorial-title">{project.title}</h1>
           <p className="lede">{project.expandedTitle}</p>

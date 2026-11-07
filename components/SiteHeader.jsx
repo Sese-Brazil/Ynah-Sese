@@ -25,6 +25,7 @@ export default function SiteHeader({ darkMode, navigation, onCommandOpen, onThem
       const currentHash = window.location.hash.replace('#', '');
       if (sectionIds.includes(currentHash)) {
         setActiveSection(currentHash);
+        if (!document.getElementById(currentHash)) return;
       }
 
       const headerOffset = 96;

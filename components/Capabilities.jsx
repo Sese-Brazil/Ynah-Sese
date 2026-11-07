@@ -1,8 +1,15 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import SectionHeading from '@/components/SectionHeading';
 import { capabilities, capabilityFilters, categoryLabels, keyboardRows } from '@/data/capabilities';
+
+const lightPalettes = [
+  { id: 'ice', label: 'Ice', colors: ['#e1f7ff', '#27c9dc', '#ffb547'] },
+  { id: 'rgb', label: 'RGB', colors: ['#1b70ff', '#ff4fd8', '#ff2d4b'] },
+  { id: 'mono', label: 'Mono', colors: ['#ffffff', '#bec6d0', '#828b97'] },
+  { id: 'signal', label: 'Signal', colors: ['#ff4444', '#ffb547', '#f5f8ff'] }
+];
 
 function CategoryFilters({ activeFilter, onChange }) {
   return (
@@ -124,17 +131,125 @@ function KeyboardLightToggle({ lightsOn, onToggle }) {
       className={`keyboard-light-toggle ${lightsOn ? 'active' : ''}`}
       type="button"
       onClick={onToggle}
-      aria-pressed={lightsOn}
+      role="switch"
+      aria-checked={lightsOn}
+      aria-label={`Turn keyboard lights ${lightsOn ? 'off' : 'on'}`}
     >
-      <span aria-hidden="true" />
-      Keyboard lights {lightsOn ? 'on' : 'off'}
+      <span className="keyboard-switch-track" aria-hidden="true">
+        <span className="keyboard-switch-thumb" />
+        <span className="keyboard-switch-label">{lightsOn ? 'On' : 'Off'}</span>
+      </span>
     </button>
   );
 }
 
-function TechKeyboard({ activeFilter, lightsOn, lightWave }) {
+function KeyboardPaletteSelect({ palette, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(() => Math.max(0, lightPalettes.findIndex((option) => option.id === palette)));
+  const controlRef = useRef(null);
+  const selectedPalette = lightPalettes.find((option) => option.id === palette) || lightPalettes[0];
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    function handlePointerDown(event) {
+      if (!controlRef.current?.contains(event.target)) setOpen(false);
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') setOpen(false);
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]);
+
+  function selectPalette(option) {
+    onChange(option.id);
+    setActiveIndex(lightPalettes.findIndex((item) => item.id === option.id));
+    setOpen(false);
+  }
+
+  function handleMenuKeyDown(event) {
+    if (!open) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        setOpen(true);
+        setActiveIndex(Math.max(0, lightPalettes.findIndex((option) => option.id === palette)));
+      }
+      return;
+    }
+
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)) return;
+    event.preventDefault();
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      selectPalette(lightPalettes[activeIndex]);
+      return;
+    }
+
+    let nextIndex = activeIndex;
+    if (event.key === 'ArrowDown') nextIndex = (activeIndex + 1) % lightPalettes.length;
+    if (event.key === 'ArrowUp') nextIndex = (activeIndex - 1 + lightPalettes.length) % lightPalettes.length;
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = lightPalettes.length - 1;
+    setActiveIndex(nextIndex);
+  }
+
   return (
-    <div className={`keyboard-desktop keyboard-scroll-shell ${lightsOn ? 'lights-on' : 'lights-off'} ${lightWave ? 'light-wave' : ''}`}>
+    <div className="keyboard-palette-control" ref={controlRef} onKeyDown={handleMenuKeyDown}>
+      <button
+        className="keyboard-palette-trigger"
+        type="button"
+        aria-label={`Keyboard light palette: ${selectedPalette.label}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls="keyboard-palette-menu"
+        onClick={() => {
+          setActiveIndex(Math.max(0, lightPalettes.findIndex((option) => option.id === palette)));
+          setOpen((value) => !value);
+        }}
+      >
+        <span className="keyboard-palette-dot" aria-hidden="true" />
+        <span>{selectedPalette.label}</span>
+        <span className="keyboard-palette-chevron" aria-hidden="true" />
+      </button>
+      {open && (
+        <div
+          className="keyboard-palette-menu"
+          id="keyboard-palette-menu"
+          role="listbox"
+          aria-label="Keyboard light palettes"
+        >
+          {lightPalettes.map((option, index) => (
+            <button
+              className={`keyboard-palette-option ${option.id === palette ? 'selected' : ''} ${index === activeIndex ? 'active' : ''}`}
+              type="button"
+              role="option"
+              aria-selected={option.id === palette}
+              key={option.id}
+              onMouseEnter={() => setActiveIndex(index)}
+              onClick={() => selectPalette(option)}
+            >
+              <span className="keyboard-palette-swatches" aria-hidden="true">
+                {option.colors.map((color) => <span key={color} style={{ background: color }} />)}
+              </span>
+              <span>{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TechKeyboard({ activeFilter, lightsOn, lightWave, palette }) {
+  return (
+    <div className={`keyboard-desktop keyboard-scroll-shell palette-${palette} ${lightsOn ? 'lights-on' : 'lights-off'} ${lightWave ? 'light-wave' : ''}`}>
       <div className="keyboard-frame">
         <div className="keyboard-plate" aria-label="Technology keyboard">
           {keyboardRows.map((row, rowIndex) => (
@@ -171,7 +286,7 @@ function MiniTechKey({ skill, activeFilter, keyIndex }) {
   );
 }
 
-function MiniTechKeyboard({ activeFilter, lightsOn, lightWave }) {
+function MiniTechKeyboard({ activeFilter, lightsOn, lightWave, palette }) {
   const groupedCapabilities = useMemo(
     () => capabilityFilters
       .filter((filter) => filter.id !== 'all')
@@ -186,7 +301,7 @@ function MiniTechKeyboard({ activeFilter, lightsOn, lightWave }) {
   let keyIndex = 0;
 
   return (
-    <div className={`keyboard-mini ${lightsOn ? 'lights-on' : 'lights-off'} ${lightWave ? 'light-wave' : ''}`}>
+    <div className={`keyboard-mini palette-${palette} ${lightsOn ? 'lights-on' : 'lights-off'} ${lightWave ? 'light-wave' : ''}`}>
       {groupedCapabilities.map((group) => {
         const groupIsMuted = activeFilter !== 'all' && activeFilter !== group.id;
         return (
@@ -237,6 +352,14 @@ export default function Capabilities() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightsOn, setLightsOn] = useState(false);
   const [lightWave, setLightWave] = useState(false);
+  const [palette, setPalette] = useState('ice');
+
+  useEffect(() => {
+    try {
+      const savedPalette = window.localStorage.getItem('keyboard-light-palette');
+      if (lightPalettes.some((option) => option.id === savedPalette)) setPalette(savedPalette);
+    } catch (error) {}
+  }, []);
 
   useEffect(() => {
     if (!lightsOn) {
@@ -247,21 +370,31 @@ export default function Capabilities() {
     setLightWave(true);
     const timer = window.setTimeout(() => setLightWave(false), 1700);
     return () => window.clearTimeout(timer);
-  }, [lightsOn]);
+  }, [lightsOn, palette]);
+
+  function changePalette(nextPalette) {
+    setPalette(nextPalette);
+    try {
+      window.localStorage.setItem('keyboard-light-palette', nextPalette);
+    } catch (error) {}
+  }
 
   return (
-    <section className="section" id="capabilities">
-      <SectionHeading kicker="Capabilities" title="Technology I have worked with.">
+    <section className="section" id="tech-stack">
+      <SectionHeading kicker="Tech Stack" title="Technology I have worked with.">
         Tools and concepts I have used through academic projects, capstone work, and personal builds while continuing to strengthen my depth through practice.
       </SectionHeading>
 
       <div className="capability-keyboard mt-8">
         <div className="capability-controls">
           <CategoryFilters activeFilter={activeFilter} onChange={setActiveFilter} />
-          <KeyboardLightToggle lightsOn={lightsOn} onToggle={() => setLightsOn((value) => !value)} />
+          <div className={`keyboard-light-controls palette-${palette}`}>
+            <KeyboardPaletteSelect palette={palette} onChange={changePalette} />
+            <KeyboardLightToggle lightsOn={lightsOn} onToggle={() => setLightsOn((value) => !value)} />
+          </div>
         </div>
-        <TechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} />
-        <MiniTechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} />
+        <TechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
+        <MiniTechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
         <p className="capability-note">Select a category to highlight related technologies.</p>
       </div>
     </section>

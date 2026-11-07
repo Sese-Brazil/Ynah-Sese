@@ -28,7 +28,7 @@ export const profile = {
     'Data Systems'
   ],
   summary:
-    'Computer Science student at Pamantasan ng Lungsod ng Pasig, exploring software systems through hands-on projects.',
+    'Computer Science student at Pamantasan ng Lungsod ng Pasig, exploring software systems through hands-on projects. I enjoy turning ideas into practical web, AI, and data-focused applications while continuing to strengthen my skills through collaboration and iteration.',
   about:
     'I am a Computer Science student at Pamantasan ng Lungsod ng Pasig, exploring software engineering, artificial intelligence, and full-stack development through academic and personal projects. I am still growing my technical depth, but I enjoy learning through real builds, collaborating with others, and improving systems one iteration at a time.'
 };

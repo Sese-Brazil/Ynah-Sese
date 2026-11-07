@@ -13,9 +13,8 @@ export default function CommandPalette({ darkMode, onClose, onThemeToggle, open,
 
   const commands = useMemo(() => [
     { label: 'Go to Home', group: 'Navigation', run: () => location.assign('/#home') },
-    { label: 'View Featured Work', group: 'Navigation', run: () => location.assign('/#work') },
     { label: 'Open AURA AI project', group: 'Work', run: () => location.assign('/work/aura-ai') },
-    { label: 'Go to Capabilities', group: 'Navigation', run: () => location.assign('/#capabilities') },
+    { label: 'Go to Tech Stack', group: 'Navigation', run: () => location.assign('/#tech-stack') },
     { label: 'Open Resume', group: 'Resume', run: () => window.open(assetPath(profile.resume.path), '_blank', 'noreferrer') },
     { label: 'Download Resume', group: 'Resume', run: () => location.assign(assetPath(profile.resume.path)) },
     {
