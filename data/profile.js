@@ -9,10 +9,10 @@ export const profile = {
   university: 'Pamantasan ng Lungsod ng Pasig',
   degree: 'Bachelor of Science in Computer Science',
   resume: {
-    path: '/assets/Mary-Ynah-Brazil-Sese-Resume.pdf',
-    label: 'Mary-Ynah-Brazil-Sese-Resume.pdf',
+    path: '/assets/updated_cv.pdf',
+    label: 'Mary Ynah Brazil Sese - Updated CV',
     fileType: 'PDF',
-    updated: 'August 2026'
+    updated: 'November 2026'
   },
   availability: {
     enabled: true,

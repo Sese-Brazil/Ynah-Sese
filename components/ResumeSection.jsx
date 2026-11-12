@@ -9,7 +9,7 @@ export default function ResumeSection() {
     <section className="section" id="resume">
       <div className="resume-layout">
         <div>
-          <SectionHeading kicker="Resume" title="A overview of my software work.">
+          <SectionHeading kicker="Resume" title="An overview of my software work.">
             Download or open the PDF resume for coursework, project responsibilities, and technical experience.
           </SectionHeading>
           <div className="mt-6 tag-list">

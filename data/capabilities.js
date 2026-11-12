@@ -224,12 +224,12 @@ const techByLetter = {
   }),
   H: tech({
     letter: 'H',
-    name: 'ChatGPT',
-    category: 'ai',
-    mark: 'GPT',
-    top: '#2f6f5f',
-    side: '#12382f',
-    border: '#79b8a9',
+    name: 'PostgreSQL',
+    category: 'data',
+    iconClass: 'devicon-postgresql-plain colored',
+    top: '#336791',
+    side: '#173a55',
+    border: '#82b5d8',
     icon: '#ffffff',
     label: '#ffffff'
   }),
@@ -318,6 +318,17 @@ const techByLetter = {
     top: '#fb7a24',
     side: '#97410e',
     border: '#ffc097',
+    icon: '#ffffff',
+    label: '#ffffff'
+  }),
+  M: tech({
+    letter: 'M',
+    name: 'Supabase',
+    category: 'data',
+    iconClass: 'devicon-supabase-plain colored',
+    top: '#249b6b',
+    side: '#0f5138',
+    border: '#70d6ad',
     icon: '#ffffff',
     label: '#ffffff'
   }),

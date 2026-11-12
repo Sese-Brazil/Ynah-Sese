@@ -5,10 +5,15 @@ import ProjectBlockStack from '@/components/ProjectBlockStack';
 import { profile } from '@/data/profile';
 
 const HERO_GREETING = "Hi, I'm Ynah Sese";
+const buildTime = new Intl.DateTimeFormat('en-PH', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'Asia/Manila'
+}).format(new Date(process.env.NEXT_PUBLIC_BUILD_TIME));
 
 export default function HeroSection() {
   const [typedGreeting, setTypedGreeting] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
+  const [showCursor, setShowCursor] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -42,6 +47,12 @@ export default function HeroSection() {
     <section id="home" className="hero">
       <div className="container hero-grid">
         <div className="hero-copy">
+          <div className="hero-meta" aria-label="Portfolio information">
+            <span>
+              Updated <time dateTime={process.env.NEXT_PUBLIC_BUILD_TIME}>{buildTime}</time>
+            </span>
+            <span aria-label="Visitor count will be connected soon">Visitors --</span>
+          </div>
           <p className="kicker">Computer Science Student - Exploring AI & Full-Stack Systems</p>
           <h1 className="hero-title" aria-label={HERO_GREETING}>
             <span className="hero-title-measure" aria-hidden="true">{HERO_GREETING}</span>

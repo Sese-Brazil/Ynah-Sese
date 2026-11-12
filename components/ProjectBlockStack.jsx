@@ -113,11 +113,12 @@ export default function ProjectBlockStack() {
     }
 
     setMotion('animate');
-    window.sessionStorage.setItem(SESSION_KEY, 'true');
-
     const lockDelay = DROP_LEAD_IN + DROP_DURATION + ((projects.length - 1) * DROP_DELAY) + LOCK_PAUSE;
     const lockTimer = window.setTimeout(() => setMotion('locking'), lockDelay);
-    const settleTimer = window.setTimeout(() => setMotion('organized'), lockDelay + LOCK_DURATION);
+    const settleTimer = window.setTimeout(() => {
+      setMotion('organized');
+      window.sessionStorage.setItem(SESSION_KEY, 'true');
+    }, lockDelay + LOCK_DURATION);
 
     return () => {
       window.clearTimeout(lockTimer);
