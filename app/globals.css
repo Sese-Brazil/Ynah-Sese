@@ -1160,11 +1160,15 @@ img {
 
 .capability-keyboard {
   display: grid;
+  width: 100%;
+  min-width: 0;
   gap: 1rem;
 }
 
 .capability-controls {
   display: flex;
+  width: 100%;
+  min-width: 0;
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
@@ -1173,6 +1177,8 @@ img {
 
 .capability-toolbar {
   display: flex;
+  width: 100%;
+  min-width: 0;
   flex: 1 1 auto;
   gap: 0.55rem;
   overflow-x: auto;
@@ -1428,10 +1434,16 @@ img {
 
 .keyboard-mini {
   display: none;
+  width: 100%;
+  min-width: 0;
+  container-name: compact-keyboard;
+  container-type: inline-size;
 }
 
 .mini-key-group {
   display: grid;
+  width: 100%;
+  min-width: 0;
   gap: 0.65rem;
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   border-radius: 18px;
@@ -1467,7 +1479,9 @@ img {
 
 .mini-key-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.9rem), 1fr));
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
   gap: 0.55rem;
 }
 
@@ -1492,6 +1506,18 @@ img {
 
 .mini-tech-key:disabled {
   cursor: default;
+}
+
+@container compact-keyboard (max-width: 38rem) {
+  .mini-key-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container compact-keyboard (max-width: 19rem) {
+  .mini-key-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .mini-tech-key .keycap-top {
@@ -2818,6 +2844,33 @@ img {
 }
 
 @media (max-width: 560px) {
+  .capability-controls {
+    align-items: stretch;
+  }
+
+  .capability-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .capability-filter {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.55rem;
+    text-align: center;
+  }
+
+  .keyboard-light-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .mini-key-group {
+    padding: 0.65rem;
+  }
+
   .hero-title {
     font-size: clamp(1.45rem, 7.2vw, 2.35rem);
     white-space: nowrap;
