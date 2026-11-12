@@ -290,12 +290,13 @@ function MiniTechKeyboard({ activeFilter, lightsOn, lightWave, palette }) {
   const groupedCapabilities = useMemo(
     () => capabilityFilters
       .filter((filter) => filter.id !== 'all')
+      .filter((filter) => activeFilter === 'all' || filter.id === activeFilter)
       .map((filter) => ({
         ...filter,
         skills: capabilities.filter((skill) => skill.category === filter.id)
       }))
       .filter((group) => group.skills.length),
-    []
+    [activeFilter]
   );
 
   let keyIndex = 0;
@@ -303,9 +304,8 @@ function MiniTechKeyboard({ activeFilter, lightsOn, lightWave, palette }) {
   return (
     <div className={`keyboard-mini palette-${palette} ${lightsOn ? 'lights-on' : 'lights-off'} ${lightWave ? 'light-wave' : ''}`}>
       {groupedCapabilities.map((group) => {
-        const groupIsMuted = activeFilter !== 'all' && activeFilter !== group.id;
         return (
-          <section className={`mini-key-group ${groupIsMuted ? 'muted' : ''}`} key={group.id}>
+          <section className="mini-key-group" key={group.id}>
             <div className="mini-key-group-header">
               <span>{group.label}</span>
               <small>{group.skills.length} tools</small>
