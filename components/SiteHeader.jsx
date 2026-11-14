@@ -122,9 +122,6 @@ export default function SiteHeader({ darkMode, navigation, onCommandOpen, onThem
           })}
         </div>
         <div className="nav-actions">
-          <button className="kbd-hint desktop-only" type="button" onClick={onCommandOpen} aria-label="Open command palette">
-            Ctrl K
-          </button>
           <a className="icon-button desktop-only" href={profile.github} target="_blank" rel="noreferrer" aria-label="Open GitHub profile">
             <GithubIcon />
           </a>

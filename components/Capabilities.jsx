@@ -388,13 +388,25 @@ export default function Capabilities() {
       <div className="capability-keyboard mt-8">
         <div className="capability-controls">
           <CategoryFilters activeFilter={activeFilter} onChange={setActiveFilter} />
-          <div className={`keyboard-light-controls palette-${palette}`}>
-            <KeyboardPaletteSelect palette={palette} onChange={changePalette} />
-            <KeyboardLightToggle lightsOn={lightsOn} onToggle={() => setLightsOn((value) => !value)} />
-          </div>
         </div>
-        <TechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
-        <MiniTechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
+        <div className={`keyboard-console palette-${palette}`}>
+          <div className="keyboard-console-header">
+            <div className="keyboard-console-mark" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="keyboard-console-controls">
+              <span className="keyboard-console-label">Lighting</span>
+              <div className="keyboard-light-controls">
+                <KeyboardPaletteSelect palette={palette} onChange={changePalette} />
+                <KeyboardLightToggle lightsOn={lightsOn} onToggle={() => setLightsOn((value) => !value)} />
+              </div>
+            </div>
+          </div>
+          <TechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
+          <MiniTechKeyboard activeFilter={activeFilter} lightsOn={lightsOn} lightWave={lightWave} palette={palette} />
+        </div>
         <p className="capability-note">Select a category to highlight related technologies.</p>
       </div>
     </section>

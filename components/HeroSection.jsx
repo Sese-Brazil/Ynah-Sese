@@ -99,7 +99,7 @@ export default function HeroSection() {
               Visitors {visitorCount === null ? '--' : visitorCount.toLocaleString('en-US')}
             </span>
           </div>
-          <p className="kicker">Computer Science Student - Exploring AI & Full-Stack Systems</p>
+          <p className="kicker">Exploring Software Development, AI & Full-Stack Systems</p>
           <h1 className="hero-title" aria-label={HERO_GREETING}>
             <span className="hero-title-measure" aria-hidden="true">{HERO_GREETING}</span>
             <span className="hero-title-typed" aria-hidden="true">
